@@ -5,7 +5,9 @@ import Cart from '@/components/menu/Cart'
 import OrderForm from '@/components/order/OrderForm'
 import OrderConfirmation from '@/components/order/OrderConfirmation'
 import { Badge } from '@/components/ui/badge'
-import { MENU, CATEGORIES } from '@/data/menu'
+import { MENU, CATEGORIES, SIZES } from '@/data/menu'
+import { useDeliveryStatus } from '@/hooks/useDeliveryStatus'
+import { supabase } from '@/lib/supabase'
 
 export default function Menu({ cart }) {
   const { items, addItem, removeItem, updateQty, clearCart, total, count } = cart
@@ -13,6 +15,7 @@ export default function Menu({ cart }) {
   const [step, setStep] = useState('menu') // 'menu' | 'checkout' | 'confirmed'
   const [order, setOrder] = useState(null)
   const [cartOpen, setCartOpen] = useState(false)
+  const { enabled: deliveryEnabled } = useDeliveryStatus()
 
   const filtered = category === 'tous' ? MENU : MENU.filter(p => p.category === category)
 
@@ -21,7 +24,23 @@ export default function Menu({ cart }) {
     setCartOpen(true)
   }
 
-  const handleConfirm = (form) => {
+  const handleConfirm = async (form) => {
+    const { error } = await supabase.from('orders').insert({
+      customer_name: form.name,
+      phone: form.phone,
+      order_type: form.orderType,
+      address: form.address || null,
+      slot: form.slot,
+      items: items.map(i => ({
+        name: i.pizza.name,
+        size: i.size,
+        qty: i.qty,
+        price: SIZES[i.size].price,
+      })),
+      total: form.grandTotal,
+      status: 'new',
+    })
+    if (error) { console.error('Supabase error:', error); return }
     setOrder(form)
     clearCart()
     setStep('confirmed')
@@ -47,6 +66,7 @@ export default function Menu({ cart }) {
         <OrderForm
           items={items}
           total={total}
+          deliveryEnabled={deliveryEnabled}
           onConfirm={handleConfirm}
           onBack={() => setStep('menu')}
         />
@@ -59,7 +79,7 @@ export default function Menu({ cart }) {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-1">Notre Menu</h1>
-        <p className="text-gray-500">Bambino 26 cm – <strong>11,50 €</strong> · Papa 33 cm – <strong>14,50 €</strong></p>
+        <p className="text-gray-500">Papa 33 cm – <strong>14,50 €</strong></p>
       </div>
 
       <div className="flex gap-8">

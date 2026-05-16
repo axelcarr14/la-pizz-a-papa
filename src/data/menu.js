@@ -18,8 +18,12 @@ export const RESTAURANT_INFO = {
 }
 
 export const SIZES = {
-  bambino: { label: 'Bambino', diameter: '26 cm', price: 11.50 },
   papa: { label: 'Papa', diameter: '33 cm', price: 14.50 },
+}
+
+export const DELIVERY = {
+  fee: 2.50,
+  minOrder: 15.00,
 }
 
 export const MENU = [

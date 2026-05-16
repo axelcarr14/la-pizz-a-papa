@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="bg-gray-900 text-gray-300 mt-16">
       <div className="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <h3 className="text-white font-bold text-lg mb-3">La Pizz à Papa</h3>
+          <img src="/logo.svg" alt="La Pizz à Papa" className="h-12 w-auto mb-3 brightness-0 invert" />
           <p className="text-sm text-gray-400">Pizzas artisanales, pâte maison, ingrédients frais sélectionnés.</p>
           <a href={RESTAURANT_INFO.facebook} target="_blank" rel="noopener noreferrer"
             className="mt-4 inline-flex items-center gap-2 text-sm text-amber-400 hover:text-amber-300">
@@ -48,6 +48,7 @@ export default function Footer() {
       <Separator className="bg-gray-700" />
       <div className="max-w-6xl mx-auto px-4 py-4 text-center text-xs text-gray-500">
         © {new Date().getFullYear()} La Pizz à Papa – Bourges
+        <a href="/admin" className="ml-4 opacity-20 hover:opacity-60 transition-opacity">⚙</a>
       </div>
     </footer>
   )

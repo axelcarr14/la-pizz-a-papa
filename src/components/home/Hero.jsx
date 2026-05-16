@@ -1,34 +1,59 @@
 import { Link } from 'react-router-dom'
+import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronRight, Star } from 'lucide-react'
 
-export default function Hero() {
-  return (
-    <section className="relative bg-gradient-to-br from-red-700 via-red-600 to-red-800 text-white overflow-hidden">
-      {/* Pattern décoratif */}
-      <div className="absolute inset-0 opacity-10"
-        style={{ backgroundImage: 'radial-gradient(circle at 25% 50%, white 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+const VIDEOS = [
+  '/videos/petrissage.mp4',
+  '/videos/dans-le-four.mp4',
+  '/videos/cheese-pull.mp4',
+]
 
-      <div className="relative max-w-6xl mx-auto px-4 py-24 md:py-32 text-center">
-        <div className="inline-flex items-center gap-1 bg-white/20 rounded-full px-4 py-1.5 text-sm mb-6">
+export default function Hero() {
+  const [current, setCurrent] = useState(0)
+  const videoRef = useRef(null)
+
+  const handleEnded = () => {
+    setCurrent(prev => (prev + 1) % VIDEOS.length)
+  }
+
+  return (
+    <section className="relative h-[90vh] min-h-[560px] flex items-center justify-center overflow-hidden">
+      {/* Vidéo de fond */}
+      <video
+        ref={videoRef}
+        key={VIDEOS[current]}
+        src={VIDEOS[current]}
+        autoPlay
+        muted
+        playsInline
+        onEnded={handleEnded}
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+
+      {/* Overlay sombre */}
+      <div className="absolute inset-0 bg-black/55" />
+
+      {/* Contenu */}
+      <div className="relative z-10 text-white text-center px-4 max-w-3xl mx-auto">
+        <div className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 text-sm mb-6">
           {[1,2,3,4,5].map(i => <Star key={i} className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />)}
           <span className="ml-1">4.5/5 · 137 avis</span>
         </div>
 
-        <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
-          La Pizz à Papa
-        </h1>
-        <p className="text-xl md:text-2xl text-red-100 mb-3">
+        <img src="/logo.svg" alt="La Pizz à Papa" className="h-24 md:h-32 w-auto mx-auto mb-4 brightness-0 invert drop-shadow-xl" />
+
+        <p className="text-xl md:text-2xl text-white/90 mb-2">
           Pizzas artisanales à Bourges
         </p>
-        <p className="text-red-200 max-w-xl mx-auto mb-10">
-          Pâte maison, ingrédients frais sélectionnés, une vingtaine de recettes. Bambino 26 cm ou Papa 33 cm.
+        <p className="text-white/70 max-w-xl mx-auto mb-10">
+          Pâte maison, ingrédients frais sélectionnés. Click &amp; Collect ou Livraison.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link to="/menu">
             <Button size="lg" className="bg-white text-red-700 hover:bg-red-50 font-semibold shadow-lg">
-              Voir le menu & Commander
+              Voir le menu &amp; Commander
               <ChevronRight className="w-5 h-5" />
             </Button>
           </Link>
@@ -39,9 +64,15 @@ export default function Hero() {
           </Link>
         </div>
 
-        {/* Déco drapeaux italiens */}
-        <div className="mt-16 flex justify-center gap-2 text-2xl opacity-60">
-          🇮🇹 🍕 🇮🇹
+        {/* Indicateurs vidéo */}
+        <div className="flex justify-center gap-2 mt-10">
+          {VIDEOS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              className={`h-1 rounded-full transition-all duration-300 ${i === current ? 'w-8 bg-white' : 'w-2 bg-white/40'}`}
+            />
+          ))}
         </div>
       </div>
     </section>

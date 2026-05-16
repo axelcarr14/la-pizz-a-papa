@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { SIZES } from '@/data/menu'
 
 export function useCart() {
   const [items, setItems] = useState([])
@@ -7,9 +8,7 @@ export function useCart() {
     const key = `${pizza.id}-${size}`
     setItems(prev => {
       const existing = prev.find(i => i.key === key)
-      if (existing) {
-        return prev.map(i => i.key === key ? { ...i, qty: i.qty + 1 } : i)
-      }
+      if (existing) return prev.map(i => i.key === key ? { ...i, qty: i.qty + 1 } : i)
       return [...prev, { key, pizza, size, qty: 1 }]
     })
   }
@@ -23,11 +22,7 @@ export function useCart() {
 
   const clearCart = () => setItems([])
 
-  const total = items.reduce((sum, i) => {
-    const price = i.size === 'papa' ? 14.50 : 11.50
-    return sum + price * i.qty
-  }, 0)
-
+  const total = items.reduce((sum, i) => sum + SIZES[i.size].price * i.qty, 0)
   const count = items.reduce((sum, i) => sum + i.qty, 0)
 
   return { items, addItem, removeItem, updateQty, clearCart, total, count }

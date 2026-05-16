@@ -4,6 +4,8 @@ import Footer from '@/components/layout/Footer'
 import Home from '@/pages/Home'
 import Menu from '@/pages/Menu'
 import Avis from '@/pages/Avis'
+import Admin from '@/pages/Admin'
+import Cuisine from '@/pages/Cuisine'
 import { useCart } from '@/hooks/useCart'
 
 export default function App() {
@@ -11,17 +13,26 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen flex flex-col bg-white">
-        <Navbar cartCount={cart.count} />
-        <div className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/menu" element={<Menu cart={cart} />} />
-            <Route path="/avis" element={<Avis />} />
-          </Routes>
-        </div>
-        <Footer />
-      </div>
+      <Routes>
+        {/* Pages staff — sans nav/footer */}
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/cuisine" element={<Cuisine />} />
+
+        {/* Pages client avec layout */}
+        <Route path="/*" element={
+          <div className="min-h-screen flex flex-col bg-white">
+            <Navbar cartCount={cart.count} />
+            <div className="flex-1">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/menu" element={<Menu cart={cart} />} />
+                <Route path="/avis" element={<Avis />} />
+              </Routes>
+            </div>
+            <Footer />
+          </div>
+        } />
+      </Routes>
     </BrowserRouter>
   )
 }

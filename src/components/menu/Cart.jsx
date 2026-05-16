@@ -18,8 +18,8 @@ export default function Cart({ items, onUpdate, onRemove, onCheckout, total }) {
     <div className="flex flex-col h-full">
       <div className="flex-1 space-y-3 overflow-y-auto">
         {items.map(item => {
-          const price = item.size === 'papa' ? 14.50 : 11.50
           const size = SIZES[item.size]
+          const price = size.price
           return (
             <div key={item.key} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
               <span className="text-2xl">{item.pizza.emoji}</span>
@@ -51,13 +51,13 @@ export default function Cart({ items, onUpdate, onRemove, onCheckout, total }) {
 
       <div className="mt-4 pt-4 border-t border-gray-100">
         <div className="flex justify-between items-center mb-4">
-          <span className="font-medium text-gray-700">Total</span>
+          <span className="font-medium text-gray-700">Sous-total</span>
           <span className="text-xl font-bold text-gray-900">{total.toFixed(2)} €</span>
         </div>
         <Button onClick={onCheckout} className="w-full" size="lg">
           Commander – {total.toFixed(2)} €
         </Button>
-        <p className="text-xs text-center text-gray-400 mt-2">Retrait sur place uniquement</p>
+        <p className="text-xs text-center text-gray-400 mt-2">Click &amp; Collect ou Livraison</p>
       </div>
     </div>
   )

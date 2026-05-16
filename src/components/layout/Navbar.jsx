@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { ShoppingCart, Pizza, Menu, X } from 'lucide-react'
+import { ShoppingCart, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -17,9 +17,8 @@ export default function Navbar({ cartCount }) {
   return (
     <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-100 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 font-bold text-xl text-red-600">
-          <Pizza className="w-6 h-6" />
-          <span>La Pizz à Papa</span>
+        <Link to="/" className="flex items-center gap-2">
+          <img src="/logo.svg" alt="La Pizz à Papa" className="h-14 w-auto" />
         </Link>
 
         {/* Desktop */}
